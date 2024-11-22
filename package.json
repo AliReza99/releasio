@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc --noemit && next lint"
+    "lint": "tsc --noemit && next lint",
+    "build:packages": "cd packages/releaseio && npm i && npm run build"
   },
   "dependencies": {
     "mongodb": "^6.10.0",
