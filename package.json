@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noemit && next lint",
-    "build:packages": "cd packages/releaseio && npm i && npm run build"
+    "build:packages": "cd packages/releaseio && npm run build",
+    "test:package": "npm run build:packages && node ./packages/releaseio/dist/cli.js -t 7e752e58-a51f-4c08-bc6f-8cdb1b37e947"
   },
   "dependencies": {
+    "await-to-js": "^3.0.0",
+    "ky": "^1.7.2",
     "mongodb": "^6.10.0",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",

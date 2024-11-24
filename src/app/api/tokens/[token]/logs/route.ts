@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/mongodb";
+import { tokenExists } from "../route";
 
 export async function GET(
   request: Request,
@@ -8,13 +9,11 @@ export async function GET(
   const token = (await params).token;
 
   try {
-    // Check if token exists in the "tokens" collection
-    const tokenExists = await db.collection("tokens").findOne({ token });
-    if (!tokenExists) {
+    const exists = await tokenExists(token);
+    if (!exists) {
       return NextResponse.json({ error: "Token not found" }, { status: 404 });
     }
 
-    // Fetch logs associated with the token from the "logs" collection
     const logs = await db.collection("logs").find({ token }).toArray();
 
     return NextResponse.json({ data: logs });
