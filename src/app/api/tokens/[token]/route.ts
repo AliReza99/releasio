@@ -27,5 +27,34 @@ export async function GET(
   }
 
   // Return the token details
-  return NextResponse.json({ token: tokenDoc.token });
+  return NextResponse.json({ data: { token: tokenDoc.token } });
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ token: string }> }
+) {
+  const { token } = await params;
+
+  const [deleteError, result] = await to(
+    db.collection("tokens").deleteMany({ token })
+  );
+  if (deleteError) {
+    console.error("Error deleting tokens:", deleteError);
+    return NextResponse.json(
+      { error: "Failed to delete tokens" },
+      { status: 500 }
+    );
+  }
+
+  const deletedCount = result?.deletedCount || 0;
+
+  if (deletedCount === 0) {
+    return NextResponse.json({ error: "No tokens deleted" }, { status: 404 });
+  }
+
+  return NextResponse.json({
+    message: "tokens deleted successfully",
+    deletedCount,
+  });
 }
