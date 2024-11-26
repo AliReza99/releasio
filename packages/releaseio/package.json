@@ -16,7 +16,7 @@
     "prettify": "prettier --write --cache ./src/**/*.{js,jsx,ts,tsx}",
     "lint": "tsc --noEmit && eslint --cache --cache-location ./node_modules/.cache/eslint/ --quiet --ext .js,.jsx,.ts,.tsx,.mjs src",
     "prebuild": "rimraf dist",
-    "build": "tsc",
+    "build": "tsup src/cli.ts --format esm --dts --out-dir dist",
     "do-link": "npm link",
     "release:patch": "npm version patch",
     "release:major": "npm version major",
@@ -26,7 +26,8 @@
   "dependencies": {
     "await-to-js": "^3.0.0",
     "commander": "^12.1.0",
-    "execa": "^9.5.1"
+    "execa": "^9.5.1",
+    "tsup": "^8.3.0"
   },
   "devDependencies": {
     "@types/node": "^22.7.0",
