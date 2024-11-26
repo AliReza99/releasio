@@ -13,7 +13,7 @@ export const Actions = () => {
           },
         });
         const data = await res.json();
-        redirect(`/api/tokens/${data.token}/logs`, RedirectType.push);
+        redirect(`/tokens/${data.token}`, RedirectType.push);
       }}
     >
       generate token
