@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/mongodb";
 import { to } from "await-to-js";
-
-export function tokenExists(token: string) {
-  return db.collection("tokens").findOne({ token });
-}
+import { tokenExists } from "./utils";
 
 export async function GET(
   request: Request,

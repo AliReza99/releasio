@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/mongodb";
-import { tokenExists } from "../route";
+import { tokenExists } from "../utils";
 import { to } from "await-to-js";
-import { Log, LogPayload } from "../../../../../../packages/releaseio/src/types";
+import {
+  Log,
+  LogPayload,
+} from "../../../../../../packages/releaseio/src/types";
 
 export async function GET(
   request: Request,
