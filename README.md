@@ -2,7 +2,7 @@
 
 **Release notes and changelogs made simple.**
 
-[Visit Releasio](https://releasio.vercel.com)
+[Visit Releasio](https://releasio.vercel.app)
 
 ---
 
