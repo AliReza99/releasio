@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/mongodb";
 import { tokenExists } from "../utils";
 import { to } from "await-to-js";
-import {
+import type {
   Log,
   LogPayload,
 } from "../../../../../../packages/releaseio/src/types";

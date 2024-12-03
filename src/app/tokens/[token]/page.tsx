@@ -1,7 +1,7 @@
 import { db } from "@/lib/mongodb";
 import React from "react";
-import { validateToken } from "../../../../packages/releaseio/src/utils";
 import to from "await-to-js";
+import { tokenExists } from "@/app/api/tokens/[token]/utils";
 
 function Pre({ children }: { children: React.ReactNode }) {
   return <pre className="text-sm">{children}</pre>;
@@ -13,7 +13,7 @@ export default async function Page({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const [err] = await to(validateToken(token));
+  const [err] = await to(tokenExists(token));
   if (err) {
     return <>invalid token</>;
   }
