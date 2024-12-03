@@ -2,8 +2,8 @@ import ky from 'ky';
 import { GitLog, Log } from '../types';
 import { gitLogsToLogPayload } from './gitUtils';
 
-// const BASE_URL = 'https://releasio.vercel.app';
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://releasio.vercel.app';
+// const BASE_URL = 'http://localhost:3000';
 
 const api = ky.create({
   prefixUrl: BASE_URL, // Your base URL
