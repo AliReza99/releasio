@@ -5,7 +5,7 @@ import { to } from "await-to-js";
 import type {
   Log,
   LogPayload,
-} from "../../../../../../packages/releaseio/src/types";
+} from "../../../../../../packages/releasio/src/types";
 
 export async function GET(
   request: Request,

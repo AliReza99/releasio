@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { to } from "await-to-js";
-import type { Log } from "../../../../../../../packages/releaseio/src/types";
+import type { Log } from "../../../../../../../packages/releasio/src/types";
 
 export async function GET(
   request: Request,

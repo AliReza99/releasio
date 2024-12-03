@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import useSWR from "swr";
-import type { Log } from "../../../../../../packages/releaseio/src/types";
+import type { Log } from "../../../../../../packages/releasio/src/types";
 import ky from "ky";
 import { to } from "await-to-js";
 
