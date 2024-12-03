@@ -1,0 +1,5 @@
+{
+  "build": {
+    "installCommand": "npm install && npm install --prefix packages/releasio"
+  }
+}
