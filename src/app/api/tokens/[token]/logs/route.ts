@@ -2,10 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/mongodb";
 import { tokenExists } from "../utils";
 import { to } from "await-to-js";
-import type {
-  Log,
-  LogPayload,
-} from "../../../../../../packages/releasio/src/types";
+import type { Log, LogPayload } from "@/types";
 
 export async function GET(
   request: Request,

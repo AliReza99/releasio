@@ -2,10 +2,16 @@ import { db } from "@/lib/mongodb";
 import React from "react";
 import to from "await-to-js";
 import { tokenExists } from "@/app/api/tokens/[token]/utils";
+import { LogEditor } from "./components";
+import ky from "ky";
 
 function Pre({ children }: { children: React.ReactNode }) {
   return <pre className="text-sm">{children}</pre>;
 }
+
+const api = ky.create({
+  retry: 0,
+});
 
 export default async function Page({
   params,
@@ -62,7 +68,18 @@ export default async function Page({
 
                 return (
                   <React.Fragment key={String(el._id)}>
-                    <Pre>{JSON.stringify(log, null, 2)},</Pre>
+                    <LogEditor
+                      token={token}
+                      logId={String(el._id)}
+                      value={JSON.stringify(
+                        {
+                          version: log.version,
+                          changes: log.changes,
+                        },
+                        null,
+                        2
+                      )}
+                    />
                   </React.Fragment>
                 );
               })}
