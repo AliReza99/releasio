@@ -13,8 +13,8 @@ async function main() {
     return;
   }
 
-  const createdLog = await createLog({ token, logs: unstoredLogs });
-  console.log(`[info] new log generated: `, getLogUrl(token, createdLog._id));
+  await createLog({ token, logs: unstoredLogs });
+  console.log(`[info] new log generated: `, getLogUrl(token));
 }
 
 main();

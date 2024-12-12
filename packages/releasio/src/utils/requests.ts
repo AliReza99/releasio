@@ -34,8 +34,8 @@ async function createLogRequest(token: string, payload: unknown) {
     .then(d => d.data);
 }
 
-export function getLogUrl(token: string, logId: string) {
-  return `${BASE_URL}/tokens/${token}/logs/${logId}`;
+export function getLogUrl(token: string) {
+  return `${BASE_URL}/tokens/${token}`;
 }
 
 export async function createLog({ token, logs }: { token: string; logs: GitLog[] }) {
