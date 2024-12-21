@@ -11,20 +11,23 @@
     "test:package": "npm run build:packages && node ./packages/releasio/dist/cli.js -t e1718c80-8c25-4882-9e21-54da50400c0e"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.0.0-alpha.8",
+    "@types/three": "^0.171.0",
     "await-to-js": "^3.0.0",
     "ky": "^1.7.2",
     "mongodb": "^6.10.0",
+    "next": "15.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.1",
     "swr": "^2.2.5",
+    "three": "^0.171.0",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@eslint/eslintrc": "^3",
     "eslint": "^9",
     "eslint-config-next": "15.1.1",
     "postcss": "^8",
