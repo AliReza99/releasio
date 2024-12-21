@@ -12,3 +12,8 @@ export const Scene2Lazy = dynamic(
     import("@/components/Three/examples/starter").then((m) => m.ThreeStarter),
   { ssr: false }
 );
+
+export const Example3Lazy = dynamic(
+  () => import("@/components/Three/examples/camera").then((m) => m.Example3),
+  { ssr: false }
+);
