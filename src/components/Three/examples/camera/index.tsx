@@ -3,8 +3,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 
 const sizes = {
-  width: 800,
-  height: 800,
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
 
 const cursor = {
@@ -17,14 +17,23 @@ window.addEventListener("mousemove", (e) => {
   cursor.y = e.clientY / sizes.height - 0.5;
 });
 
+// enable double click toggle fullscreen
+window.addEventListener("dblclick", () => {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    document.body.requestFullscreen();
+  }
+});
+
 function renderScene(canvas: HTMLCanvasElement) {
   const scene = new THREE.Scene();
 
   // Object
   const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
+    new THREE.BoxGeometry(1, 1, 1, 3, 3, 3),
     new THREE.MeshBasicMaterial({
-      color: 0xff0000,
+      color: "#0288D1",
       wireframe: true,
     })
   );
@@ -34,6 +43,7 @@ function renderScene(canvas: HTMLCanvasElement) {
   const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
   // camera.position.x = 2;
   // camera.position.y = 2;
+  // camera.aspect = sizes.width / sizes.height;
   camera.position.z = 3;
   camera.lookAt(mesh.position);
   scene.add(camera);
@@ -43,6 +53,8 @@ function renderScene(canvas: HTMLCanvasElement) {
     canvas: canvas,
     antialias: true,
   });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
   renderer.setSize(sizes.width, sizes.height);
 
   // using orbit controls
@@ -58,10 +70,20 @@ function renderScene(canvas: HTMLCanvasElement) {
     // camera.lookAt(mesh.position);
 
     // update camera by controls
-    controls.update();
+    // controls.update();
 
     window.requestAnimationFrame(animation);
   };
+
+  window.addEventListener("resize", () => {
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(sizes.width, sizes.height);
+    // handle 2 monitor with different pixel ratios
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  });
 
   animation();
 }
