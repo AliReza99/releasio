@@ -1,6 +1,30 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import GUI from "lil-gui";
+import gsap from "gsap";
+
+const gui = new GUI({
+  title: "Debug UI",
+  width: 300,
+  // closeFolders: true,
+});
+// gui.hide();
+
+// stop propagating dblclick on debug ui 
+gui.domElement.addEventListener("dblclick", (e) => {
+  e.stopPropagation();
+});
+//
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "h") {
+    gui.show(gui._hidden);
+  }
+});
+
+const cubeTweaks = gui.addFolder("Cube");
+// cubeTweaks.close();
 
 const sizes = {
   width: window.innerWidth,
@@ -10,6 +34,10 @@ const sizes = {
 const cursor = {
   x: 0,
   y: 0,
+};
+
+const debugObject = {
+  segments: 5,
 };
 
 window.addEventListener("mousemove", (e) => {
@@ -29,14 +57,30 @@ window.addEventListener("dblclick", () => {
 function renderScene(canvas: HTMLCanvasElement) {
   const scene = new THREE.Scene();
 
-  // Object
   const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 3, 3, 3),
+    new THREE.BoxGeometry(
+      1,
+      1,
+      1,
+      debugObject.segments,
+      debugObject.segments,
+      debugObject.segments
+    ),
     new THREE.MeshBasicMaterial({
       color: "#0288D1",
       wireframe: true,
     })
   );
+
+  const actions = {
+    spin() {
+      gsap.to(mesh.rotation, {
+        y: mesh.rotation.y + Math.PI * 2,
+        duration: 1,
+      });
+    },
+  };
+
   scene.add(mesh);
 
   // Camera
@@ -45,6 +89,33 @@ function renderScene(canvas: HTMLCanvasElement) {
   // camera.position.y = 2;
   // camera.aspect = sizes.width / sizes.height;
   camera.position.z = 3;
+
+  cubeTweaks
+    .add(camera.position, "z")
+    .min(-3)
+    .max(10)
+    .step(0.01)
+    .name("Camera Z");
+  cubeTweaks.add(mesh.material, "wireframe").name("Wireframe");
+  cubeTweaks.addColor(mesh.material, "color").name("Color");
+  cubeTweaks.add(actions, "spin").name("Spin");
+  cubeTweaks
+    .add(debugObject, "segments")
+    .min(1)
+    .max(50)
+    .step(1)
+    .onFinishChange(() => {
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.BoxGeometry(
+        1,
+        1,
+        1,
+        debugObject.segments,
+        debugObject.segments,
+        debugObject.segments
+      );
+    });
+
   camera.lookAt(mesh.position);
   scene.add(camera);
 
@@ -96,7 +167,7 @@ export const Example3 = () => {
 
     const canvas = canvasRef.current;
     renderScene(canvas);
-  }, [renderScene]);
+  }, []);
   //
 
   return (
