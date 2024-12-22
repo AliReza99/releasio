@@ -17,3 +17,8 @@ export const Example3Lazy = dynamic(
   () => import("@/components/Three/examples/camera").then((m) => m.Example3),
   { ssr: false }
 );
+
+export const Example4Lazy = dynamic(
+  () => import("@/components/Three/examples/texture").then((m) => m.Example4),
+  { ssr: false }
+);
