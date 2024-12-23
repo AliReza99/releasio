@@ -64,6 +64,8 @@ window.addEventListener("dblclick", () => {
 function renderScene(canvas: HTMLCanvasElement) {
   const scene = new THREE.Scene();
 
+  texture.colorSpace = THREE.SRGBColorSpace;
+  
   const mesh = new THREE.Mesh(
     new THREE.BoxGeometry(
       1,
@@ -73,6 +75,7 @@ function renderScene(canvas: HTMLCanvasElement) {
       debugObject.segments,
       debugObject.segments
     ),
+
     new THREE.MeshBasicMaterial({
       // color: "#0288D1",
       map: texture,
@@ -149,7 +152,7 @@ function renderScene(canvas: HTMLCanvasElement) {
     // camera.lookAt(mesh.position);
 
     // update camera by controls
-    // controls.update();
+    controls.update();
 
     window.requestAnimationFrame(animation);
   };
