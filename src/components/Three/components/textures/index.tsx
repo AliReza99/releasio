@@ -26,6 +26,16 @@ const locations = [
   "/textures/door/metalness.jpg",
   "/textures/door/normal.jpg",
   "/textures/door/roughness.jpg",
+  //
+  "/textures/bricks/color.jpg",
+  "/textures/bricks/ambientOcclusion.jpg",
+  "/textures/bricks/normal.jpg",
+  "/textures/bricks/roughness.jpg",
+  //
+  "/textures/grass/color.jpg",
+  "/textures/grass/ambientOcclusion.jpg",
+  "/textures/grass/normal.jpg",
+  "/textures/grass/roughness.jpg",
 ];
 
 export const textures = locations.reduce((pre, current) => {

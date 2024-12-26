@@ -32,3 +32,9 @@ export const Example6Lazy = dynamic(
   () => import("@/components/Three/examples/text").then((m) => m.ExamplePage),
   { ssr: false }
 );
+
+export const Example7Lazy = dynamic(
+  () =>
+    import("@/components/Three/examples/exercise1").then((m) => m.Exercise1),
+  { ssr: false }
+);
