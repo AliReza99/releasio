@@ -22,7 +22,13 @@ export const Example4Lazy = dynamic(
   () => import("@/components/Three/examples/texture").then((m) => m.Example4),
   { ssr: false }
 );
+
 export const Example5Lazy = dynamic(
   () => import("@/components/Three/examples/materials").then((m) => m.Example5),
+  { ssr: false }
+);
+
+export const Example6Lazy = dynamic(
+  () => import("@/components/Three/examples/text").then((m) => m.ExamplePage),
   { ssr: false }
 );
