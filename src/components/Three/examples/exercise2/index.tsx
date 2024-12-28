@@ -2,6 +2,7 @@ import GUI from "lil-gui";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import gsap from "gsap";
 
 const gui = new GUI({
   title: "Debug UI",
@@ -31,8 +32,8 @@ const parameters = {
 
 function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
   const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
-  camera.position.z = 3;
-  camera.position.y = 0.7;
+  camera.position.z = 5;
+  camera.position.y = 7;
   // camera.rotation.x = Math.PI * 0.5;
   // camera.lookAt(new THREE.Vector3());
   camera.aspect = sizes.width / sizes.height;
@@ -182,10 +183,17 @@ function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
 
   const clock = new THREE.Clock();
 
+  const timeline = gsap.timeline();
+
+  timeline
+    .fromTo(camera.position, { z: 3, y: 7 }, { z: 2.7, y: .5, duration: 3, delay: 2 })
+    .to(camera.position, { z: 2.7, y: 0.6, duration: 4 });
+
   function tick() {
     renderer.render(scene, camera);
 
     points?.rotation.set(0, clock.getElapsedTime() * parameters.speed, 0);
+
 
     controls.update();
 
