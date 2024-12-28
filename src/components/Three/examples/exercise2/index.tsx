@@ -26,6 +26,7 @@ const parameters = {
   randomnessPower: 2.4,
   innerColor: "#ff824d",
   outerColor: "#8a92ff",
+  speed: 0.01,
 };
 
 function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
@@ -168,6 +169,12 @@ function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
     .max(1)
     .step(0.01)
     .onFinishChange(generateGalaxy);
+  gui
+    .add(parameters, "speed")
+    .min(0.0)
+    .max(10)
+    .step(0.01)
+    .onFinishChange(generateGalaxy);
   gui.addColor(parameters, "innerColor").onFinishChange(generateGalaxy);
   gui.addColor(parameters, "outerColor").onFinishChange(generateGalaxy);
 
@@ -178,7 +185,7 @@ function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
   function tick() {
     renderer.render(scene, camera);
 
-    points?.rotation.set(0, clock.getElapsedTime() * 0.01, 0);
+    points?.rotation.set(0, clock.getElapsedTime() * parameters.speed, 0);
 
     controls.update();
 
