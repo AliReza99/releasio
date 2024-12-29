@@ -11,6 +11,8 @@
     "test:package": "npm run build:packages && node ./packages/releasio/dist/cli.js -t e1718c80-8c25-4882-9e21-54da50400c0e"
   },
   "dependencies": {
+    "@react-spring/three": "^9.7.5",
+    "@react-three/drei": "^9.120.4",
     "@react-three/fiber": "^9.0.0-alpha.8",
     "@types/lodash": "^4.17.13",
     "@types/three": "^0.171.0",
