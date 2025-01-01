@@ -61,6 +61,7 @@ function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
 
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
+  controls.enabled = false;
 
   let geometry: THREE.BufferGeometry | null = null;
   let material: THREE.PointsMaterial | null = null;
@@ -142,9 +143,9 @@ function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
     .onFinishChange(generateGalaxy);
   gui
     .add(parameters, "size")
-    .min(0.001)
+    .min(0.0005)
     .max(0.05)
-    .step(0.001)
+    .step(0.0005)
     .onFinishChange(generateGalaxy);
   gui
     .add(parameters, "radius")
@@ -186,14 +187,20 @@ function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
   const timeline = gsap.timeline();
 
   timeline
-    .fromTo(camera.position, { z: 3, y: 7 }, { z: 2.7, y: .5, duration: 3, delay: 2 })
-    .to(camera.position, { z: 2.7, y: 0.6, duration: 4 });
+    .fromTo(
+      camera.position,
+      { z: 3, y: 7 },
+      { z: 2.7, y: 0.5, duration: 3, delay: 2 }
+    )
+    .to(camera.position, { z: 2.7, y: 0.6, duration: 3 })
+    .eventCallback("onComplete", () => {
+      controls.enabled = true;
+    });
 
   function tick() {
     renderer.render(scene, camera);
 
     points?.rotation.set(0, clock.getElapsedTime() * parameters.speed, 0);
-
 
     controls.update();
 
