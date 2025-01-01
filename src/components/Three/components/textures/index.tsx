@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import _ from "lodash";
-import { RGBELoader } from "three/examples/jsm/Addons.js";
 
 const loader = new THREE.TextureLoader();
 
@@ -54,8 +53,6 @@ export const textures = locations.reduce((pre, current) => {
 
   return pre;
 }, {} as Record<string, THREE.Texture>);
-
-const rgbeLoader = new RGBELoader();
 
 // export const environementMap = {
 //   "2k": rgbeLoader.load("/textures/environmentMap/2k.hdr", (environmentMap) => {
