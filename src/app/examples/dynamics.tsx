@@ -56,3 +56,11 @@ export const Example10Lazy = dynamic(
     import("@/components/Three/examples/physics").then((m) => m.Example10Page),
   { ssr: false }
 );
+
+export const Example11Lazy = dynamic(
+  () =>
+    import("@/components/Three/examples/gltfmodels").then(
+      (m) => m.Example11Page
+    ),
+  { ssr: false }
+);
