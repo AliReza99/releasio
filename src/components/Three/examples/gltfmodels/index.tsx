@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { GLTFLoader, DRACOLoader } from "three/examples/jsm/Addons.js";
+import "@/utils/EventEmitter";
 
 // @refresh reset
 
