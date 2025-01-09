@@ -64,3 +64,10 @@ export const Example11Lazy = dynamic(
     ),
   { ssr: false }
 );
+export const Example12Lazy = dynamic(
+  () =>
+    import("@/components/Three/examples/basicShaders").then(
+      (m) => m.BasicShaders
+    ),
+  { ssr: false }
+);

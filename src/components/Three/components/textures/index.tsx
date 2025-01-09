@@ -35,6 +35,8 @@ const locations = [
   "/textures/grass/ambientOcclusion.jpg",
   "/textures/grass/normal.jpg",
   "/textures/grass/roughness.jpg",
+  // 
+  "/textures/flags/fr.jpg",
 ];
 
 export const textures = locations.reduce((pre, current) => {
