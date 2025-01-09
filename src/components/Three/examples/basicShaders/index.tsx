@@ -20,7 +20,7 @@ function initialize({ canvas }: { canvas: HTMLCanvasElement }) {
   const mesh = new THREE.Mesh(
     new THREE.PlaneGeometry(1, 1, 32, 32),
     // new THREE.MeshBasicMaterial({ color: "#f00" })
-    new THREE.RawShaderMaterial({
+    new THREE.ShaderMaterial({
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,
       side: THREE.DoubleSide,
