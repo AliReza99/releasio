@@ -71,3 +71,10 @@ export const Example12Lazy = dynamic(
     ),
   { ssr: false }
 );
+export const Example13Lazy = dynamic(
+  () =>
+    import("@/components/Three/examples/shadersPattern").then(
+      (m) => m.ShadersPattern
+    ),
+  { ssr: false }
+);
