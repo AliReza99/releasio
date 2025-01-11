@@ -78,3 +78,10 @@ export const Example13Lazy = dynamic(
     ),
   { ssr: false }
 );
+export const Example14Lazy = dynamic(
+  () =>
+    import("@/components/Three/examples/shadersExample1").then(
+      (m) => m.ShadersExample1
+    ),
+  { ssr: false }
+);
