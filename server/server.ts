@@ -1,50 +1,53 @@
-import express from "express";
 import "./bot";
 import "./spotify";
-import { Spotify } from "./spotify";
+import Fastify from "fastify";
+import { SubscriptionService } from "./services/subscriptionService";
 
-const app = express();
+const fastify = Fastify({ logger: true });
 
-app.listen(4000, () => {
-  console.log(`[server started on port 4000] `);
-});
+fastify.post("/subscriptions", async (req, reply) => {
+  const { chatId, playlists } = req.body as {
+    chatId: string;
+    playlists: string[];
+  };
 
-app.get("/", async (req, res) => {
-  await Spotify.authenticate();
-  const start = Date.now();
-  const r = await Spotify.getPlaylistTracks("0u8ab7oAwtFPWgNWMIFlTu");
-  const elapsedTime = Date.now() - start;
-
-  res.json({
-    message: "success",
-    timeTakenMs: elapsedTime,
-    res: r,
-  });
-});
-
-// Create or update a subscription
-app.post("/subscriptions", (req, res) => {
-  const { chatId, playlists } = req.body; // Extract payload
   if (!chatId || !Array.isArray(playlists)) {
-    res.status(400).json({ message: "Invalid payload" });
+    reply.status(400).send({ message: "Invalid payload" });
     return;
   }
-  res.status(501).json({ message: "Not implemented", chatId, playlists });
+
+  const result = await SubscriptionService.create(chatId, playlists);
+
+  reply.send({ message: "Subscription saved", result });
 });
 
-// Delete a subscription by ID
-app.delete("/subscriptions/:id", (req, res) => {
-  const { id } = req.params; // Extract ID from URL
-  res.status(501).json({ message: "Not implemented", id });
+fastify.delete("/subscriptions/:id", async (req, reply) => {
+  const { id } = req.params as { id: string };
+
+  await SubscriptionService.delete(id);
+
+  reply.send({ message: "Subscription deleted" });
 });
 
-// Get all subscriptions
-app.get("/subscriptions", (req, res) => {
-  res.status(501).json({ message: "Not implemented" });
+fastify.get("/subscriptions", async (req, reply) => {
+  const subscriptions = await SubscriptionService.getAll();
+  reply.send(subscriptions);
 });
 
-// Get a specific subscription by ID
-app.get("/subscriptions/:id", (req, res) => {
-  const { id } = req.params; // Extract ID from URL
-  res.status(501).json({ message: "Not implemented", id });
+fastify.get("/subscriptions/:id", async (req, reply) => {
+  const { id } = req.params as { id: string };
+
+  const subscription = await SubscriptionService.getById(id);
+
+  if (!subscription) {
+    reply.status(404).send({ message: "Subscription not found" });
+    return;
+  }
+
+  reply.send(subscription);
+});
+
+fastify.listen({ port: 4000 }, (err, address) => {
+  if (err) throw err;
+  console.log(`🚀 Server running at ${address}`);
 });
