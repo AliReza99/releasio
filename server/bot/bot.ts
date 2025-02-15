@@ -1,4 +1,7 @@
 import { Telegraf, Context } from "telegraf";
+import { Spotify } from "../spotify";
+import { SubscriptionService } from "../services/subscriptionService";
+import { PlaylistService } from "../services/playlistService";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 export class Bot {
@@ -18,22 +21,16 @@ export class Bot {
 
       const match = post.text.match(/^\/playlist\s+(\S+)/);
 
-      if (match) {
-        const playlistId = match[1];
-        await Bot.handlePlaylistCommand(ctx, playlistId);
-      }
+      if (!match) return;
+
+      const playlistUrl = match[1];
+      const spotifyPlaylistId = Spotify.playlistUrlToId(playlistUrl);
+      if (!spotifyPlaylistId) return;
+      const playlistId = await PlaylistService.create(spotifyPlaylistId);
+      await SubscriptionService.create(ctx.chat.id, [playlistId.toString()]);
+
+      await ctx.reply(`Playlist updated.`);
+      await ctx.deleteMessage();
     });
   }
-
-  static async handlePlaylistCommand(ctx: Context, playlistId: string) {
-    try {
-      await ctx.deleteMessage();
-      await ctx.reply(`Playlist updated: ${playlistId}`);
-    } catch (error) {
-      console.error("Error handling playlist command:", error);
-    }
-  }
 }
-
-Bot.start();
-Bot.registerHandlers();

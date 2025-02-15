@@ -6,6 +6,10 @@ import {
 } from "./middlewares/loggerMiddleware";
 import { setupSwagger } from "./config/swagger";
 import { subscriptionRoutes } from "./routes/subscriptions";
+import { Bot } from "./bot";
+
+Bot.start();
+Bot.registerHandlers();
 
 const fastify = Fastify({
   logger: {

@@ -69,4 +69,11 @@ export class Spotify {
 
     return body;
   }
+
+  static playlistUrlToId(playlistUrl: string) {
+    const match = playlistUrl.match(
+      /(?:playlist\/|spotify:playlist:)([a-zA-Z0-9]+)/
+    );
+    return match ? match[1] : null;
+  }
 }

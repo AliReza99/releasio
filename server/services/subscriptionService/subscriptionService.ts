@@ -4,7 +4,7 @@ import { db } from "../../config/db";
 const collection = db.collection("subscriptions");
 
 export class SubscriptionService {
-  static async create(chatId: string, playlists: string[]) {
+  static async create(chatId: number, playlists: string[]) {
     return collection.updateOne(
       { chatId },
       { $set: { playlists, updatedAt: new Date() } },
