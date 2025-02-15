@@ -7,6 +7,7 @@ import {
 import { setupSwagger } from "./config/swagger";
 import { subscriptionRoutes } from "./routes/subscriptions";
 import { Bot } from "./bot";
+import { playlistRoutes } from "./routes/playlists";
 
 Bot.start();
 Bot.registerHandlers();
@@ -33,3 +34,4 @@ await setupSwagger(fastify);
 fastify.listen({ port: Number(process.env.PORT || 3000) });
 
 fastify.register(subscriptionRoutes);
+fastify.register(playlistRoutes);

@@ -15,7 +15,7 @@ export class SubscriptionService {
   static async delete(id: string) {
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
     if (result.deletedCount) return;
-    throw new Error("Subscription not found");
+    throw new Error("not found");
   }
 
   static async getAll() {
