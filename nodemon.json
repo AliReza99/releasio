@@ -1,6 +1,6 @@
 {
   "watch": ["server"],
   "ext": "ts",
-  "exec": "node --loader @esbuild-kit/esm-loader server/server.ts",
+  "exec": "clear && node --no-warnings=ExperimentalWarning --loader @esbuild-kit/esm-loader server/main.ts",
   "ignore": ["server/**/*.test.ts"]
 }

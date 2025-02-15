@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { db } from "../../mongodb";
+import { db } from "../../config/db";
 
 const collection = db.collection("subscriptions");
 
