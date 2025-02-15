@@ -1,3 +1,4 @@
+import "./utils/envs";
 import "./bot";
 import "./spotify";
 import Fastify from "fastify";

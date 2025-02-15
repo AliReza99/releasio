@@ -1,7 +1,4 @@
 import SpotifyWebApi from "spotify-web-api-node";
-import { config } from "dotenv";
-config();
-
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
