@@ -54,10 +54,12 @@ export class Spotify {
     spotifyApi.setAccessToken(body.access_token);
   }
 
-  static async getPlaylistTracks(
+  static async getPlaylistItems(
     playlistId: string,
     { page = 1, pageSize = 100 }: { page?: number; pageSize?: number } = {}
   ) {
+    await Spotify.authenticate();
+
     const offset = (page - 1) * pageSize;
     const body: PlaylistTracksResponse = await spotifyApi
       .getPlaylistTracks(playlistId, {
@@ -68,6 +70,25 @@ export class Spotify {
       .then((d) => d.body);
 
     return body;
+  }
+
+  static async getAllPlaylistItems(playlistId: string) {
+    const items = [];
+
+    for (let page = 1; true; page++) {
+      const res = await Spotify.getPlaylistItems(playlistId, {
+        page: page,
+        pageSize: 100,
+      });
+
+      items.push(...res.items);
+
+      if (res.items.length === 0 || res.total < page * 100) {
+        break;
+      }
+    }
+
+    return items;
   }
 
   static playlistUrlToId(playlistUrl: string) {

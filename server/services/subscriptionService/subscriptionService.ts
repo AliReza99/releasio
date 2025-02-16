@@ -19,7 +19,7 @@ export class SubscriptionService {
   }
 
   static async getAll() {
-    return collection.find().toArray();
+    return collection.find().sort({ _id: -1 }).toArray();
   }
 
   static async getById(id: string) {

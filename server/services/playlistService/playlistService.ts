@@ -1,7 +1,21 @@
 import { ObjectId } from "mongodb";
 import { db } from "../../config/db";
 
-const collection = db.collection("playlists");
+type PlaylistRecord = {
+  spotifyId: string;
+  tracks: {
+    addedAt: string;
+    name: string;
+    id: string;
+    urls: {
+      spotify: string;
+    };
+  }[];
+  syncedAt: string;
+  createdAt: string;
+};
+
+const collection = db.collection<PlaylistRecord>("playlists");
 
 export class PlaylistService {
   static async create(spotifyPlaylistId: string) {
@@ -16,9 +30,23 @@ export class PlaylistService {
     const createdPlaylist = await collection.insertOne({
       spotifyId: spotifyPlaylistId,
       tracks: [],
+      syncedAt: new Date().toISOString(), // we're only going to add tracks **after** the time of creation of playlist
+      createdAt: new Date().toISOString(),
     });
 
     return createdPlaylist.insertedId;
+  }
+
+  static async update(
+    id: string | ObjectId,
+    updatedRecord: Partial<PlaylistRecord>
+  ) {
+    return await collection.updateOne(
+      {
+        _id: new ObjectId(id),
+      },
+      { $set: updatedRecord }
+    );
   }
 
   static async delete(id: string) {
@@ -28,7 +56,7 @@ export class PlaylistService {
   }
 
   static async getAll() {
-    return collection.find().toArray();
+    return collection.find().sort({ _id: -1 }).toArray();
   }
 
   static async getById(id: string) {
