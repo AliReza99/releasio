@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
+import { getServerAddress } from "../../utils/fastify";
 
 export async function setupSwagger(fastify: FastifyInstance) {
   await fastify.register(swagger, {
@@ -20,14 +21,6 @@ export async function setupSwagger(fastify: FastifyInstance) {
 
   // show docs url
   fastify.addHook("onListen", async () => {
-    const address = fastify.server.address();
-    const host =
-      typeof address === "string"
-        ? address
-        : address !== null
-        ? `http://localhost:${address.port}`
-        : "";
-
-    fastify.log.info(`Docs at ${host}/docs`);
+    fastify.log.info(`Docs at ${getServerAddress(fastify)}/docs`);
   });
 }
