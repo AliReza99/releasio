@@ -1,5 +1,5 @@
 import IORedis from "ioredis";
-import { Queue, Worker } from "bullmq";
+import { JobsOptions, Queue, Worker } from "bullmq";
 
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
@@ -11,6 +11,7 @@ if (!REDIS_HOST || !REDIS_PORT) {
 export class JobManager<TJobData extends Record<string, unknown>> {
   queue: Queue;
   worker: Worker;
+  name: string;
   constructor({
     name,
     handler,
@@ -19,6 +20,7 @@ export class JobManager<TJobData extends Record<string, unknown>> {
     handler: (jobData: TJobData) => void;
   }) {
     this.queue = new Queue(name);
+    this.name = name;
     this.worker = new Worker(
       name,
       async (job) => {
@@ -30,9 +32,18 @@ export class JobManager<TJobData extends Record<string, unknown>> {
     );
   }
 
-  add(jobData: TJobData) {
-    if (!this.queue) throw new Error("Queue is not initialized");
+  add(jobData: TJobData, jobsOption?: JobsOptions) {
+    this.queue.add(this.name, jobData, jobsOption);
+  }
 
-    this.queue.add(this.queue.name, jobData);
+  /**
+   * @deprecated this method is deprecated
+   */
+  async removeRepeatable() {
+    const repeatableJobs = await this.queue.getRepeatableJobs();
+
+    for (const repeatableJob of repeatableJobs) {
+      await this.queue.removeRepeatableByKey(repeatableJob.key);
+    }
   }
 }
