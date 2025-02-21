@@ -1,9 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
 import { JobManager } from "./plugins/jobManager";
-// import { Bot } from "./bot";
-
-// Bot.start();
-// Bot.registerHandlers();
 
 const telegramJobManager = new JobManager({
   name: "telegramJobs",
@@ -15,6 +11,7 @@ const telegramJobManager = new JobManager({
 const app: FastifyPluginAsync = async (fastify) => {
   await fastify.register(import("./plugins/swagger"));
   await fastify.register(import("./plugins/logger"));
+  await fastify.register(import("./services/bot/plugin"));
   // routes
   await fastify.register(import("./routes/subscriptions"));
   await fastify.register(import("./routes/playlists"));

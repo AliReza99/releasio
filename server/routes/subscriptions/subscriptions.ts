@@ -22,7 +22,7 @@ export function subscriptionRoutes(fastify: FastifyInstance) {
 
   fastify.post("/subscriptions", async (req, reply) => {
     const { chatId, playlists } = req.body as {
-      chatId: string;
+      chatId: number;
       playlists: string[];
     };
 

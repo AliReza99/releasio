@@ -1,7 +1,7 @@
-import { Telegraf, Context } from "telegraf";
+import { Telegraf } from "telegraf";
 import { Spotify } from "../spotify";
-import { SubscriptionService } from "../services/subscriptionService";
-import { PlaylistService } from "../services/playlistService";
+import { SubscriptionService } from "../subscriptionService";
+import { PlaylistService } from "../playlistService";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 export class Bot {
@@ -11,6 +11,10 @@ export class Bot {
 
     process.once("SIGINT", () => bot.stop("SIGINT"));
     process.once("SIGTERM", () => bot.stop("SIGTERM"));
+  }
+
+  static stop() {
+    bot.stop();
   }
 
   static registerHandlers() {
@@ -25,7 +29,10 @@ export class Bot {
 
       const playlistUrl = match[1];
       const spotifyPlaylistId = Spotify.playlistUrlToId(playlistUrl);
-      if (!spotifyPlaylistId) return;
+      if (!spotifyPlaylistId) {
+        await ctx.reply(`invalid spotify playlist url.`);
+        return;
+      }
       const playlistId = await PlaylistService.create(spotifyPlaylistId);
       await SubscriptionService.create(ctx.chat.id, [playlistId.toString()]);
 
