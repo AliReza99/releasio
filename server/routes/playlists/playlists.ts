@@ -1,7 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { PlaylistService } from "../../services/playlistService";
-import { Spotify } from "../../spotify";
-import moment from "moment";
+import { Spotify } from "../../services/spotify";
 
 export function playlistRoutes(fastify: FastifyInstance) {
   fastify.get("/playlists", async (req, reply) => {

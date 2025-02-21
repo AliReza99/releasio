@@ -3,11 +3,14 @@ import { FastifyAdapter } from "@bull-board/fastify";
 import { createBullBoard } from "@bull-board/api";
 import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
 import { Queue } from "bullmq";
-import { getServerAddress } from "../fastify";
+import { getServerAddress } from "../../utils/fastify";
 
 const serverAdapter = new FastifyAdapter();
 
-export function registerBullBoard(fastify: FastifyInstance, queues: Queue[]) {
+export function registerBullBoard(
+  fastify: FastifyInstance,
+  { queues }: { queues: Queue[] }
+) {
   createBullBoard({
     queues: queues.map((queue) => new BullMQAdapter(queue)),
     serverAdapter,

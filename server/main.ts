@@ -1,40 +1,29 @@
-import "./utils/envs";
+import "dotenv/config";
 import Fastify from "fastify";
-import {
-  onRequestLogger,
-  onResponseLogger,
-} from "./middlewares/loggerMiddleware";
-import { setupSwagger } from "./config/swagger";
-import { subscriptionRoutes } from "./routes/subscriptions";
-import { Bot } from "./bot";
-import { playlistRoutes } from "./routes/playlists";
-import { registerBullBoard } from "./utils/jobManager/ui";
-import { JobManager } from "./utils/jobManager";
-import { fastify } from "./server";
 
-Bot.start();
-Bot.registerHandlers();
+async function main() {
+  const fastify = Fastify({
+    logger: {
+      transport: {
+        target: "pino-pretty",
+        options: {
+          colorize: true,
+          translateTime: "SYS:HH:mm:ss",
+          ignore: "pid,hostname,reqId",
+        },
+      },
+    },
+    disableRequestLogging: true,
+  });
 
-await setupSwagger(fastify);
+  const port = Number(process.env.PORT || 3000);
+  const appUrl = process.env.APP_URL || `http://localhost:${port}`;
 
-fastify.addHook("onRequest", onRequestLogger);
-fastify.addHook("onResponse", onResponseLogger);
+  await fastify.register(import("./app"), {
+    url: appUrl,
+  });
 
-fastify.listen({ port: Number(process.env.PORT || 3000) });
+  await fastify.listen({ port: port });
+}
 
-fastify.register(subscriptionRoutes);
-fastify.register(playlistRoutes);
-
-const telegramJobManager = new JobManager({
-  name: "telegramJobs",
-  handler: async ({ to, message }: { to: string; message: string }) => {
-    console.log(`[sending message to] `, to, message);
-  },
-});
-
-registerBullBoard(fastify, [telegramJobManager.queue!]);
-
-// telegramJobManager.add({
-//   to: "9815",
-//   message: "Hello there",
-// });
+main();

@@ -1,9 +1,10 @@
+import fp from "fastify-plugin";
 import { FastifyInstance } from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { getServerAddress } from "../../utils/fastify";
 
-export async function setupSwagger(fastify: FastifyInstance) {
+async function setupSwagger(fastify: FastifyInstance) {
   await fastify.register(swagger, {
     swagger: {
       info: {
@@ -24,3 +25,5 @@ export async function setupSwagger(fastify: FastifyInstance) {
     fastify.log.info(`Docs at ${getServerAddress(fastify)}/docs`);
   });
 }
+
+export default fp(setupSwagger);

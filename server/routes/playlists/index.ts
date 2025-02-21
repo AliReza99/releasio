@@ -1,1 +1,1 @@
-export * from "./playlists";
+export { playlistRoutes as default } from "./playlists";

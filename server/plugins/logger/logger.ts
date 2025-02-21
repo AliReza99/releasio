@@ -1,16 +1,13 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyRequest, FastifyReply, FastifyInstance } from "fastify";
 import { isIgnoredPath } from "./utils";
 
-export async function onRequestLogger(request: FastifyRequest) {
+async function onRequestLogger(request: FastifyRequest) {
   if (isIgnoredPath(request.url)) return;
 
   request.log.info(`[req] ${request.method}: ${request.url}`);
 }
 
-export async function onResponseLogger(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
+async function onResponseLogger(request: FastifyRequest, reply: FastifyReply) {
   if (isIgnoredPath(request.url)) return;
 
   if (reply.statusCode >= 500) {
@@ -31,4 +28,9 @@ export async function onResponseLogger(
     },
     `[res] ${request.method}: ${request.url}`
   );
+}
+
+export async function fastifyLoggerPlugin(fastify: FastifyInstance) {
+  fastify.addHook("onRequest", onRequestLogger);
+  fastify.addHook("onResponse", onResponseLogger);
 }
