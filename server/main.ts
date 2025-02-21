@@ -19,9 +19,7 @@ async function main() {
   const port = Number(process.env.PORT || 3000);
   const appUrl = process.env.APP_URL || `http://localhost:${port}`;
 
-  await fastify.register(import("./app"), {
-    url: appUrl,
-  });
+  await fastify.register(import("./app"));
 
   await fastify.listen({ port: port });
 }

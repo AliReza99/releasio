@@ -5,10 +5,6 @@ import { JobManager } from "./plugins/jobManager";
 // Bot.start();
 // Bot.registerHandlers();
 
-type Options = {
-  url: string;
-};
-
 const telegramJobManager = new JobManager({
   name: "telegramJobs",
   handler: async ({ to, message }: { to: string; message: string }) => {
@@ -16,7 +12,7 @@ const telegramJobManager = new JobManager({
   },
 });
 
-const app: FastifyPluginAsync<Options> = async (fastify, { url }) => {
+const app: FastifyPluginAsync = async (fastify) => {
   await fastify.register(import("./plugins/swagger"));
   await fastify.register(import("./plugins/logger"));
   // routes
