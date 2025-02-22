@@ -2,8 +2,25 @@ import { Telegraf } from "telegraf";
 import { Spotify } from "../spotify";
 import { SubscriptionService } from "../subscriptionService";
 import { PlaylistService } from "../playlistService";
+import { JobManager } from "../../plugins/jobManager";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
+
+// Note: old messages will be start to sent automatically
+export const telegramJobManager = new JobManager({
+  name: "telegramJobManager",
+  cleanStart: true,
+  limiter: {
+    duration: 10000,
+    max: 1,
+  },
+  retry: 3,
+  retryDelay: 1000,
+  async handler({ chatId, message }: { chatId: number; message: string }) {
+    await Bot.sendMessage(chatId, message);
+  },
+});
+
 export class Bot {
   static start() {
     bot.launch();
@@ -39,5 +56,14 @@ export class Bot {
       await ctx.reply(`Playlist updated.`);
       await ctx.deleteMessage();
     });
+  }
+
+  static async sendMessage(chatId: number, message: string) {
+    console.log(`[sending message] `, chatId, message);
+    await bot.telegram.sendMessage(chatId, message);
+  }
+
+  static scheduleSendMessage(chatId: number, message: string) {
+    telegramJobManager.add({ chatId, message });
   }
 }

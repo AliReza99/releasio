@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { PlaylistService } from "../../services/playlistService";
 import { Spotify } from "../../services/spotify";
+import { to } from "await-to-js";
 
 export function playlistRoutes(fastify: FastifyInstance) {
   fastify.get("/playlists", async (req, reply) => {
@@ -32,49 +33,16 @@ export function playlistRoutes(fastify: FastifyInstance) {
   fastify.post("/playlists/:id/sync", async (req, reply) => {
     const { id } = req.params as { id: string };
 
-    const record = await PlaylistService.getById(id);
+    const [err, newTracks] = await to(PlaylistService.sync(id));
 
-    if (!record) {
+    if (err?.message === "NOT_FOUND") {
       reply.status(404).send({ message: "not found" });
       return;
     }
-
-    const playlistItems = await Spotify.getAllPlaylistItems(record.spotifyId);
-
-    const newTracks = playlistItems
-      .map((item) => {
-        if (!item.track) return null;
-
-        return {
-          addedAt: item.added_at,
-          name: item.track.name,
-          id: item.track.id,
-          urls: {
-            spotify: item.track.external_urls.spotify,
-          },
-        };
-      })
-      .filter(Boolean)
-      .filter((item) => {
-        return (
-          new Date(item.addedAt).getTime() > new Date(record.syncedAt).getTime()
-        );
-      });
-
-    const trackMap = new Map<string, (typeof newTracks)[0]>();
-
-    [...record.tracks, ...newTracks].forEach((track) => {
-      trackMap.set(track.id, track); // This ensures only the latest entry per ID is kept
-    });
-
-    const sortedTracks = Array.from(trackMap.values()).sort(
-      (a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime()
-    );
-
-    await PlaylistService.update(record._id, {
-      syncedAt: new Date().toISOString(),
-      tracks: sortedTracks,
-    });
+    if (err) {
+      reply.status(500).send({ message: err.message });
+      return;
+    }
 
     reply.send({ message: `${newTracks.length} tracks updated` });
   });
